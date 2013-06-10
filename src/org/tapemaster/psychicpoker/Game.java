@@ -30,17 +30,17 @@ public class Game {
         result.add(mHand);
         for (int depth = 1; depth <= Hand.NUMBER_OF_CARDS; depth++) {
             for (List<Integer> discard : getVariation(new ArrayList<Integer>(), 0, depth)) {
-                addVariation(result, discard.toArray(new Integer[] {}));
+                addVariation(result, discard);
             }
         }
 
         return Collections.max(result).getValue();
     }
 
-    private void addVariation(List<Hand> result, Integer[] toDiscard) {
-        final int[] discard = new int[toDiscard.length];
+    private void addVariation(List<Hand> result, List<Integer> toDiscard) {
+        final int[] discard = new int[toDiscard.size()];
         for (int i = 0; i < discard.length; i++) {
-            discard[i] = toDiscard[i];
+            discard[i] = toDiscard.get(i);
         }
         final Hand otherHand = mHand.discard(discard, mDeck);
         result.add(otherHand);

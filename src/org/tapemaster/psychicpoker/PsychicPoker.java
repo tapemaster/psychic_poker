@@ -12,6 +12,11 @@ import org.tapemaster.psychicpoker.Hand.Value;
  */
 public class PsychicPoker {
 
+    /**
+     * Reads input file given as a first element in arguments and for each line
+     * prints value of the best possible hand.
+     * The lines must contain card captions for the hand and the deck.
+     */
 	public static void main(String[] args) {
         if (args.length != 1) {
             System.out.println("Usage: java PsychicPoker source_file");
@@ -29,17 +34,21 @@ public class PsychicPoker {
             reader = new BufferedReader(new FileReader(inputFile));
             String line;
             while ((line = reader.readLine()) != null) {
-                playGame(line);
+                try {
+                    playGame(line);
+                } catch (Exception e) {
+                    System.err.println("Error while processing line '" + line + "': " + e);
+                }
             }
         } catch (IOException ioe) {
-            System.err.println("Got an exception while reading from file: " + ioe);
+            System.err.println("Error while reading from file: " + ioe);
         } finally {
             try {
                 if (reader != null) {
                     reader.close();
                 }
             } catch (IOException e) {
-                System.err.println("Exception while closing input file: " + e);
+                System.err.println("Error closing input file: " + e);
             }
         }
     }

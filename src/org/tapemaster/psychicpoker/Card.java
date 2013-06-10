@@ -69,6 +69,14 @@ public class Card implements Comparable<Card> {
      */
     public enum Suit {
         C, D, H, S;
+
+        public static Suit getByCaption(String caption) {
+            try {
+                return valueOf(caption);
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("No such card suit: " + caption);
+            }
+        }
     }
 
     private final Rank mValue;
@@ -92,7 +100,7 @@ public class Card implements Comparable<Card> {
         final String suitPart = input.substring(1, 2);
 
         mValue = Rank.getByCaption(valuePart);
-        mSuit = Suit.valueOf(suitPart);
+        mSuit = Suit.getByCaption(suitPart);
         
         if (mValue == null) {
             throw new IllegalArgumentException("Couldn't find value '" + valuePart + "'");
