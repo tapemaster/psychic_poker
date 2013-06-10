@@ -3,11 +3,11 @@ package org.tapemaster.psychicpoker;
 import static org.junit.Assert.assertEquals;
 import static org.tapemaster.psychicpoker.PsychicPoker.cardInputHelper;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.junit.Test;
 
+/**
+ * Unit test for Game class.
+ */
 public class GameTest {
 
     @Test
@@ -31,9 +31,6 @@ public class GameTest {
         Hand hand = new Hand(cardInputHelper(handInput));
         Card[] deck = cardInputHelper(deckInput);
         Game game = new Game(hand, deck);
-        List<Hand> result = game.getAllPossibleHands();
-        Collections.sort(result);
-        Hand best = result.get(result.size() - 1);
-        assertEquals(expected, best.getValue());
+        assertEquals(expected, game.getBestHand());
     }
 }

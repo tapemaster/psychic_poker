@@ -4,9 +4,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
 
+import org.tapemaster.psychicpoker.Hand.Value;
+
+/**
+ * Main class of PsychicPoker.
+ */
 public class PsychicPoker {
 
 	public static void main(String[] args) {
@@ -48,11 +51,9 @@ public class PsychicPoker {
         Card[] deck = cardInputHelper(deckInput);
         Game game = new Game(hand, deck);
 
-        List<Hand> result = game.getAllPossibleHands();
-        Collections.sort(result);
-        Hand best = result.get(result.size() - 1);
+        Value best = game.getBestHand();
         System.out.println("Hand: " + hand.toString() + " Deck: "
-                + getDeckString(deck) + " Best hand: " + best.getValue());
+                + getDeckString(deck) + " Best hand: " + best);
     }
 
     private String getDeckString(Card[] deck) {
@@ -64,6 +65,14 @@ public class PsychicPoker {
         return builder.toString().trim();
     }
 
+    /**
+     * Creates array of Cards from input string.
+     * 
+     * @param input
+     *            String consisting of {@link Card} captions separated with spaces
+     *            
+     * @throws IllegalArgumentException if input string is in wrong format           
+     */
     public static Card[] cardInputHelper(String input) {
         if (input.length() != Hand.NUMBER_OF_CARDS * 3 - 1) {
             throw new IllegalArgumentException(

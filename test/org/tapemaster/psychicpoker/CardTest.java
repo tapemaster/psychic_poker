@@ -6,6 +6,9 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
+/**
+ * Unit test for Card class.
+ */
 public class CardTest {
 
     @Test

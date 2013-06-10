@@ -6,10 +6,19 @@ import java.util.List;
 
 import org.tapemaster.psychicpoker.Card.Rank;
 
+/**
+ * Represents hand of cards.
+ */
 public class Hand implements Comparable<Hand> {
 
+    /**
+     * Number of cards in a hand.
+     */
     public static final int NUMBER_OF_CARDS = 5;
 
+    /**
+     * Represents value of this hand.
+     */
     public enum Value {
         HIGHEST_CARD("highest-card"),
         ONE_PAIR("one-pair"),
@@ -23,6 +32,9 @@ public class Hand implements Comparable<Hand> {
         
         private final String mCaption;
 
+        /**
+         * Creates Value object with caption.
+         */
         Value(String caption) {
             mCaption = caption;
         }
@@ -35,6 +47,12 @@ public class Hand implements Comparable<Hand> {
     
     private final Card[] mCards;
 
+    /**
+     * Creates new Hand object.
+     * 
+     * @param cards
+     *            the cards that are in this hand
+     */
     public Hand(Card[] cards) {
         if (cards.length != NUMBER_OF_CARDS) {
             throw new IllegalArgumentException("Number of cards in hand must be " + NUMBER_OF_CARDS);
@@ -43,6 +61,9 @@ public class Hand implements Comparable<Hand> {
         Arrays.sort(mCards);
     }
 
+    /**
+     * Gets hand's value.
+     */
     public Value getValue() {
         if (isFlush() && isStraight()) {
             return Value.STRAIGHT_FLUSH;
@@ -84,6 +105,15 @@ public class Hand implements Comparable<Hand> {
         return findNOfaKind(3);
     }
 
+    /**
+     * Helper method that looks for number of cards with the same ranking in
+     * this hand. Supposed to be used only with n=3 and n=4.
+     * 
+     * @param n
+     *            the number of cards to look for
+     * @return Rank of the card if found, null if number of cards with this
+     *         ranking is less or more than n
+     */
     private Rank findNOfaKind(int n) {
         Rank middle = mCards[2].getValue();
 
@@ -101,6 +131,12 @@ public class Hand implements Comparable<Hand> {
         }
     }
 
+    /**
+     * Helper method looking for pairs in this hand. 
+     * Skips three and four of a kind.
+     * 
+     * @return List of pairs found
+     */
     private List<Rank> findPairs() {
         List<Rank> result = new ArrayList<Rank>();
         for (int i = 1; i < NUMBER_OF_CARDS - 1; i++) {
@@ -156,11 +192,32 @@ public class Hand implements Comparable<Hand> {
         return false;
     }
 
+    /**
+     * Creates new hand from by discarding some number of cards. Original hand
+     * doesn't change after this.
+     * 
+     * @param toDiscard
+     *            array of integer indices of cards that must be discarded
+     * @param deck
+     *            the deck of the cards to take from, the size must be
+     *            {@link NUMBER_OF_CARDS}
+     * @return new hand
+     * @throws IllegalArgumentException
+     *             if deck size is not {@link NUMBER_OF_CARDS} or 
+     *             toDiscard indices are not in range from 0 to NUMBER_OF_CARDS-1
+     */
     public Hand discard(int[] toDiscard, Card[] deck) {
+        if (deck.length != NUMBER_OF_CARDS) {
+            throw new IllegalStateException("Deck size must be " + NUMBER_OF_CARDS);
+        }
         final Card[] newCards = Arrays.copyOf(mCards, NUMBER_OF_CARDS);
 
         int deckIndex = 0;
         for (int discardIndex : toDiscard) {
+            if (discardIndex < 0 || discardIndex >= NUMBER_OF_CARDS) {
+                throw new IllegalStateException(
+                        "Indices for discard must be from 0 to " + (NUMBER_OF_CARDS - 1));
+            }
             newCards[discardIndex] = deck[deckIndex];
             deckIndex++;
         }
@@ -169,6 +226,9 @@ public class Hand implements Comparable<Hand> {
     }
 
     @Override
+    /**
+     * Compares by hands' Values.
+     */
     public int compareTo(Hand other) {
         return getValue().compareTo(other.getValue());
     }

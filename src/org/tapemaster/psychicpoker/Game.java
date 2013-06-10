@@ -1,19 +1,31 @@
 package org.tapemaster.psychicpoker;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import org.tapemaster.psychicpoker.Hand.Value;
+
+/**
+ * The Game class represents single game of draw poker.
+ */
 public class Game {
 
     private final Card[] mDeck;
     private final Hand mHand;
 
+    /**
+     * Creates new Game object from Hand and deck.
+     */
     public Game(Hand hand, Card[] deck) {
         mHand = hand;
         mDeck = deck;
     }
 
-    public List<Hand> getAllPossibleHands() {
+    /**
+     * Gets value of the best possible hand.
+     */
+    public Value getBestHand() {
         final List<Hand> result = new ArrayList<Hand>();
         result.add(mHand);
         for (int depth = 1; depth <= Hand.NUMBER_OF_CARDS; depth++) {
@@ -21,7 +33,8 @@ public class Game {
                 addVariation(result, discard.toArray(new Integer[] {}));
             }
         }
-        return result;
+
+        return Collections.max(result).getValue();
     }
 
     private void addVariation(List<Hand> result, Integer[] toDiscard) {
@@ -55,5 +68,4 @@ public class Game {
             return result;
         }
     }
-
 }
