@@ -15,6 +15,44 @@ public class Game {
     private final Hand mHand;
 
     /**
+     * All possible discard variations.
+     */
+    private static final List<int[]> sVariations = new ArrayList<int[]>();
+
+    static {
+        getVariations(new ArrayList<Integer>(), 0);
+    }
+    
+    /**
+     * This function is called recursively, and on each iteration it adds new
+     * discard variation.
+     * 
+     * @param base
+     *            the base of the discard list to add new element
+     * @param start
+     *            the index to start from to skip duplicate variations
+     */
+    private static void getVariations(List<Integer> base, int start) {
+        for (int i = start; i < Hand.NUMBER_OF_CARDS; i++) {
+            List<Integer> newVariation = new ArrayList<Integer>(base);
+            newVariation.add(i);
+            sVariations.add(integerListToIntArray(newVariation));
+            getVariations(newVariation, i + 1);
+        }
+    }
+
+    /**
+     * Converts List<Integer> to int[], for convenience.
+     */
+    private static int[] integerListToIntArray(List<Integer> list) {
+        final int[] result = new int[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            result[i] = list.get(i);
+        }
+        return result;
+    }
+
+    /**
      * Creates new Game object from Hand and deck.
      */
     public Game(Hand hand, Card[] deck) {
@@ -26,46 +64,14 @@ public class Game {
      * Gets value of the best possible hand.
      */
     public Value getBestHand() {
-        final List<Hand> result = new ArrayList<Hand>();
-        result.add(mHand);
-        for (int depth = 1; depth <= Hand.NUMBER_OF_CARDS; depth++) {
-            for (List<Integer> discard : getVariation(new ArrayList<Integer>(), 0, depth)) {
-                addVariation(result, discard);
-            }
+        final List<Hand> possibleHands = new ArrayList<Hand>();
+        possibleHands.add(mHand); //starting from hand without any cards changed
+
+        for (int[] variation : sVariations) {
+            final Hand otherHand = mHand.discard(variation, mDeck);
+            possibleHands.add(otherHand);
         }
 
-        return Collections.max(result).getValue();
-    }
-
-    private void addVariation(List<Hand> result, List<Integer> toDiscard) {
-        final int[] discard = new int[toDiscard.size()];
-        for (int i = 0; i < discard.length; i++) {
-            discard[i] = toDiscard.get(i);
-        }
-        final Hand otherHand = mHand.discard(discard, mDeck);
-        result.add(otherHand);
-    }
-
-    private List<List<Integer>> getVariation(List<Integer> base, int start,
-            int maxDepth) {
-        if (maxDepth == 1) {
-            List<List<Integer>> result = new ArrayList<List<Integer>>();
-            for (int i = start; i < Hand.NUMBER_OF_CARDS; i++) {
-                List<Integer> thisOne = new ArrayList<Integer>(base);
-                thisOne.add(i);
-                result.add(thisOne);
-            }
-            return result;
-        } else {
-            List<List<Integer>> result = new ArrayList<List<Integer>>();
-            for (int i = start; i < Hand.NUMBER_OF_CARDS; i++) {
-                List<Integer> newBase = new ArrayList<Integer>(base);
-                newBase.add(i);
-                List<List<Integer>> thisOne = getVariation(newBase, i + 1,
-                        maxDepth - 1);
-                result.addAll(thisOne);
-            }
-            return result;
-        }
+        return Collections.max(possibleHands).getValue();
     }
 }
