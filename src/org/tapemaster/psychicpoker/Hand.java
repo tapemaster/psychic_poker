@@ -62,7 +62,7 @@ public class Hand implements Comparable<Hand> {
     }
 
     /**
-     * Gets hand's value.
+     * Gets value of this hand.
      */
     public Value getValue() {
         if (isFlush() && isStraight()) {
@@ -193,7 +193,7 @@ public class Hand implements Comparable<Hand> {
     }
 
     /**
-     * Creates new hand from by discarding some number of cards. Original hand
+     * Creates new hand by discarding some number of cards. Original hand
      * doesn't change after this.
      * 
      * @param toDiscard
@@ -201,10 +201,10 @@ public class Hand implements Comparable<Hand> {
      * @param deck
      *            the deck of the cards to take from, the size must be
      *            {@link NUMBER_OF_CARDS}
-     * @return new hand
+     * @return new hand with changed cards
      * @throws IllegalArgumentException
-     *             if deck size is not {@link NUMBER_OF_CARDS} or 
-     *             toDiscard indices are not in range from 0 to NUMBER_OF_CARDS-1
+     *             if deck size is not {@link NUMBER_OF_CARDS} or toDiscard
+     *             indices are not in range from 0 to NUMBER_OF_CARDS-1
      */
     public Hand discard(int[] toDiscard, Card[] deck) {
         if (deck.length != NUMBER_OF_CARDS) {
@@ -216,7 +216,8 @@ public class Hand implements Comparable<Hand> {
         for (int discardIndex : toDiscard) {
             if (discardIndex < 0 || discardIndex >= NUMBER_OF_CARDS) {
                 throw new IllegalStateException(
-                        "Indices for discard must be from 0 to " + (NUMBER_OF_CARDS - 1));
+                        "Discard indices must be from 0 to "
+                                + (NUMBER_OF_CARDS - 1));
             }
             newCards[discardIndex] = deck[deckIndex];
             deckIndex++;
@@ -227,7 +228,7 @@ public class Hand implements Comparable<Hand> {
 
     @Override
     /**
-     * Compares by hands' Values.
+     * Compares by value of hands.
      */
     public int compareTo(Hand other) {
         return getValue().compareTo(other.getValue());

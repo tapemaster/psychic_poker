@@ -15,7 +15,7 @@ public class Game {
     private final Hand mHand;
 
     /**
-     * All possible discard variations.
+     * All possible discard variations as array of card indices.
      */
     private static final List<int[]> sVariations = new ArrayList<int[]>();
 

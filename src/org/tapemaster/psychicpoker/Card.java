@@ -9,6 +9,11 @@ import java.util.Map;
 public class Card implements Comparable<Card> {
 
     /**
+     * Length of caption used to construct the card.
+     */
+    public static final int CAPTION_LENGTH = 2;
+
+    /**
      * Rank of the card. Goes with card's caption:
      * 2, 3, 4, 5, 6, 7, 8, 9, T, J, Q, K and A.
      */
@@ -70,11 +75,15 @@ public class Card implements Comparable<Card> {
     public enum Suit {
         C, D, H, S;
 
+        /**
+         * Gets suit by caption, this method is needed to get better error
+         * message in case the suit is not found.
+         */
         public static Suit getByCaption(String caption) {
             try {
                 return valueOf(caption);
             } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("No such card suit: " + caption);
+                return null;
             }
         }
     }
@@ -92,8 +101,8 @@ public class Card implements Comparable<Card> {
         if (input == null) {
             throw new IllegalArgumentException("Card caption must not be null");
         }
-        if (input.length() != 2) {
-            throw new IllegalArgumentException("Card caption must be string size of 2");
+        if (input.length() != CAPTION_LENGTH) {
+            throw new IllegalArgumentException("Card caption size must be " + CAPTION_LENGTH);
         }
 
         final String valuePart = input.substring(0, 1);
@@ -112,7 +121,7 @@ public class Card implements Comparable<Card> {
 
     @Override
     /**
-     * Compares two cards basing on the ranking only. It doesn't depend on the cards' suit.
+     * Compares two cards by ranking only, it doesn't depend on suit.
      */
     public int compareTo(Card that) {
         return mValue.ordinal() - that.mValue.ordinal();
@@ -124,14 +133,14 @@ public class Card implements Comparable<Card> {
     }
 
     /**
-     * Gets card's value.
+     * Gets value of the card.
      */
     public Rank getValue() {
         return mValue;
     }
 
     /**
-     * Gets card's suit.
+     * Gets suit of the card.
      */
     public Suit getSuit() {
         return mSuit;

@@ -54,8 +54,10 @@ public class PsychicPoker {
     }
 
     private void playGame(String line) {
-        final String handInput = line.substring(0, 14).trim();
-        final String deckInput = line.substring(15).trim();
+        final int handLength = (Card.CAPTION_LENGTH + 1) * Hand.NUMBER_OF_CARDS;
+        final String handInput = line.substring(0, handLength).trim();
+        final String deckInput = line.substring(handLength).trim();
+
         Hand hand = new Hand(cardInputHelper(handInput));
         Card[] deck = cardInputHelper(deckInput);
         Game game = new Game(hand, deck);
@@ -66,7 +68,7 @@ public class PsychicPoker {
     }
 
     private String getDeckString(Card[] deck) {
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         for (Card card : deck) {
             builder.append(card);
             builder.append(" ");
@@ -83,15 +85,16 @@ public class PsychicPoker {
      * @throws IllegalArgumentException if input string is in wrong format           
      */
     public static Card[] cardInputHelper(String input) {
-        if (input.length() != Hand.NUMBER_OF_CARDS * 3 - 1) {
+        final int oneCardLength = Card.CAPTION_LENGTH + 1;
+        if (input.length() != Hand.NUMBER_OF_CARDS * oneCardLength - 1) {
             throw new IllegalArgumentException(
                     "Input string has wrong format, expected five cards "
                             + "two symbols each separated with space.");
         }
         final Card[] cards = new Card[Hand.NUMBER_OF_CARDS];
         for (int i = 0; i < Hand.NUMBER_OF_CARDS; i++) {
-            final int pos = i * 3;
-            cards[i] = new Card(input.substring(pos, pos + 2));
+            final int pos = i * oneCardLength;
+            cards[i] = new Card(input.substring(pos, pos + Card.CAPTION_LENGTH));
         }
         return cards;
     }
