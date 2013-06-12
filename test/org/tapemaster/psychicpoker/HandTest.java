@@ -18,6 +18,6 @@ public class HandTest {
     }
 
     private Hand hand(String input) {
-        return new Hand(PsychicPoker.cardInputHelper(input));
+        return new Hand(PsychicPoker.parseCards(input));
     }
 }

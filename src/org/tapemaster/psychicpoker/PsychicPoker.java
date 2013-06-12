@@ -14,20 +14,20 @@ public class PsychicPoker {
 
     /**
      * Reads input file given as a first element in arguments and for each line
-     * prints value of the best possible hand.
-     * The lines must contain card captions for the hand and the deck.
+     * prints value of the best possible hand. The lines must contain card
+     * captions for the hand and the deck.
      */
-	public static void main(String[] args) {
+    public static void main(String[] args) {
         if (args.length != 1) {
             System.out.println("Usage: java PsychicPoker source_file");
             System.exit(1);
         }
 
         final File inputFile = new File(args[0]);
-        new PsychicPoker().processInput(inputFile);
+        new PsychicPoker().readInputAndPlay(inputFile);
     }
 
-    private void processInput(File inputFile) {
+    private void readInputAndPlay(File inputFile) {
         BufferedReader reader = null;
         
         try {
@@ -58,8 +58,8 @@ public class PsychicPoker {
         final String handInput = line.substring(0, handLength).trim();
         final String deckInput = line.substring(handLength).trim();
 
-        Hand hand = new Hand(cardInputHelper(handInput));
-        Card[] deck = cardInputHelper(deckInput);
+        Hand hand = new Hand(parseCards(handInput));
+        Card[] deck = parseCards(deckInput);
         Game game = new Game(hand, deck);
 
         Value best = game.getBestHand();
@@ -84,7 +84,7 @@ public class PsychicPoker {
      *            
      * @throws IllegalArgumentException if input string is in wrong format           
      */
-    public static Card[] cardInputHelper(String input) {
+    public static Card[] parseCards(String input) {
         final int oneCardLength = Card.CAPTION_LENGTH + 1;
         if (input.length() != Hand.NUMBER_OF_CARDS * oneCardLength - 1) {
             throw new IllegalArgumentException(

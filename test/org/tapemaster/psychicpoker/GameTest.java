@@ -1,7 +1,7 @@
 package org.tapemaster.psychicpoker;
 
 import static org.junit.Assert.assertEquals;
-import static org.tapemaster.psychicpoker.PsychicPoker.cardInputHelper;
+import static org.tapemaster.psychicpoker.PsychicPoker.parseCards;
 
 import org.junit.Test;
 
@@ -32,8 +32,8 @@ public class GameTest {
 
     private void check(String handInput, String deckInput,
             Hand.Value expected) {
-        Hand hand = new Hand(cardInputHelper(handInput));
-        Card[] deck = cardInputHelper(deckInput);
+        Hand hand = new Hand(parseCards(handInput));
+        Card[] deck = parseCards(deckInput);
         Game game = new Game(hand, deck);
         assertEquals(expected, game.getBestHand());
     }
