@@ -58,18 +58,18 @@ public class PsychicPoker {
         final String handInput = line.substring(0, handLength).trim();
         final String deckInput = line.substring(handLength).trim();
 
-        Hand hand = new Hand(parseCards(handInput));
-        Card[] deck = parseCards(deckInput);
-        Game game = new Game(hand, deck);
+        final Hand hand = new Hand(parseCards(handInput));
+        final Card[] deck = parseCards(deckInput);
+        final Game game = new Game(hand, deck);
 
-        Value best = game.getBestHand();
+        final Value best = game.getBestHand();
         System.out.println("Hand: " + hand.toString() + " Deck: "
-                + getDeckString(deck) + " Best hand: " + best);
+                + cardsArrayToString(deck) + " Best hand: " + best);
     }
 
-    private String getDeckString(Card[] deck) {
+    private String cardsArrayToString(Card[] cards) {
         final StringBuilder builder = new StringBuilder();
-        for (Card card : deck) {
+        for (Card card : cards) {
             builder.append(card);
             builder.append(" ");
         }

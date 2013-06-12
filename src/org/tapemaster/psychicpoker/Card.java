@@ -59,7 +59,7 @@ public class Card implements Comparable<Card> {
         /**
          * Creates new Ranking with caption.
          */
-        Rank(String caption) {
+        private Rank(String caption) {
             mCaption = caption;
         }
 

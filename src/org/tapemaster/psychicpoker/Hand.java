@@ -35,7 +35,7 @@ public class Hand implements Comparable<Hand> {
         /**
          * Creates Value object with caption.
          */
-        Value(String caption) {
+        private Value(String caption) {
             mCaption = caption;
         }
 
@@ -107,7 +107,9 @@ public class Hand implements Comparable<Hand> {
 
     /**
      * Helper method that looks for number of cards with the same ranking in
-     * this hand. Supposed to be used only with n=3 and n=4.
+     * this hand. Supposed to be used only with n=3 and n=4, that's why in the
+     * sorted array of cards, mCards[2] will be involved in combination if it is
+     * three or four of a kind.
      * 
      * @param n
      *            the number of cards to look for
@@ -154,8 +156,10 @@ public class Hand implements Comparable<Hand> {
         final Rank current = mCards[NUMBER_OF_CARDS - 2].getValue();
         final Rank prev = mCards[NUMBER_OF_CARDS - 3].getValue();
         final Rank next = mCards[NUMBER_OF_CARDS - 1].getValue();
-        if ((current == next) && (prev != current)) {
-            result.add(current);
+        if (current == next) {
+            if (current != prev) {
+                result.add(current);
+            }
         }
         return result;
     }
